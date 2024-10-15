@@ -1,0 +1,97 @@
+.crosshair {cursor: crosshair;}
+
+:root {
+    color-scheme: dark light;
+    font-family: system-ui, sans-serif;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding-block-start: .5rem;
+    min-block-size: 100dvb;
+}
+
+h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+h1, p {
+    margin-block: 0;
+}
+
+a {
+    color: CanvasText;
+}
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+body > :not(canvas) {
+    margin-inline: .5rem;
+}
+
+canvas {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-block-size: 0;
+    background-color: black;
+    box-sizing: border-box;
+}
+
+.top-left-container {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+	padding: 10px;
+	border-radius: 5px;
+	color: white;
+	z-index: 100; /* Ensures it stays on top */
+}
+
+label.max-iterations {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	color: white;
+}
+
+input[type="range"] {
+	margin-top: 5px;
+}
+
+#coordinates {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+  }
+  
+#small_canvas {
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+    width: 300px;
+    height: 300px;
+    border-radius: 150px;
+  }
+
+#axes_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2; /* Overlay it above the WebGL canvas */
+    pointer-events: none; /* Make sure it doesn't block user interactions */
+}

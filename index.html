@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="robots" content="all" />
+	<meta name="theme-color" content="black" />
+
+	<link rel="stylesheet" href="./styles.css">
+	<link rel="icon" href="./assets/icon.png" />
+	<link rel="manifest" href="./app.webmanifest" />
+
+	<title>WebGL Mandelbrot</title>
+
+	<script type="module" src="./main.js"></script>
+
+	<link rel="prefetch" as="fetch" href="./vertex.glsl" />
+	<link rel="prefetch" as="fetch" href="./fragment.glsl" />
+</head>
+
+<body>
+
+	<div class="top-left-container">
+		<label class="max-iterations">
+			<span>Max iterations: <span id="max-iterations">256</span></span>
+			<input type="range" min="0" max="15" value="8" step="1" />
+		</label>
+
+		<label for="theme-select">Choose a theme:</label>
+		<select id="theme-select">
+			<option value="0">Default</option>
+			<option value="1">SinSmooth</option>
+			<option value="2">Black&White</option>
+			<option value="3">Colorful</option>
+		</select>
+	</div>
+
+	<div id="coordinates"></div>
+
+	<canvas class="crosshair" id="canvas"></canvas>
+	<canvas id="small_canvas"></canvas>
+</body>
+
+</html>

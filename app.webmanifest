@@ -1,0 +1,14 @@
+{
+	"name": "WebGPU Mandelbrot",
+	"short_name": "Mandelbrot",
+	"description": "A GPU accelerated Mandelbrot viewer made using the WebGPU API",
+	"start_url": "./",
+	"display": "standalone",
+	"background_color": "#000",
+	"icons": [{
+		"src": "./assets/icon.png",
+		"type": "image/png",
+		"sizes": "256x256",
+		"purpose": "any monochrome"
+	}]
+}
