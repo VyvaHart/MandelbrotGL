@@ -4,11 +4,14 @@ precision highp float;
 uniform vec2 juliaConstant;   // Julia constant (based on Mandelbrot coordinates)
 uniform vec2 rectangle;       // Zoom and aspect ratio
 uniform int maxIterations;
+uniform vec2 cursorPosition;  // Normalized device coordinates of the cursor
+uniform float cursorSize;     // Size of the cursor
 
 in vec2 fragmentPosition;
 out vec4 fragColor;
 
 void main() {
+    // Julia set rendering
     vec2 z = fragmentPosition * rectangle;
     int iteration = 0;
     float zx2, zy2;
@@ -23,6 +26,7 @@ void main() {
         }
     }
 
+    // Calculate color for the Julia set
     if (iteration < maxIterations) {
         float normalizedIter = float(iteration) / float(maxIterations);
         fragColor = vec4(
@@ -33,5 +37,16 @@ void main() {
         );
     } else {
         fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+
+    float maxCursorLength = 0.03;  // Adjust this value to control the cursor line length
+
+    // Draw cursor as a white crosshair
+    float distX = abs(fragmentPosition.x - cursorPosition.x);
+    float distY = abs(fragmentPosition.y - cursorPosition.y);
+
+    // Check if the fragment is within the cursor's size and also within the max line length
+    if ((distX < cursorSize && distY < maxCursorLength) || (distY < cursorSize && distX < maxCursorLength)) {
+        fragColor = vec4(1.0, 1.0, 1.0, 0.5);  // Set the cursor color (white with transparency)
     }
 }
