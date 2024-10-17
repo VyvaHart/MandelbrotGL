@@ -147,6 +147,9 @@ const frame = () => {
     // Render Julia set using the mouse position on Mandelbrot canvas
     renderJulia();
 
+    // Draw the cursor on the Julia canvas after the Julia set is rendered
+    drawJuliaCursor();
+
     // Schedule the next frame
     window.requestAnimationFrame(frame);
 };
@@ -224,22 +227,69 @@ const renderJulia = () => {
 
     juliaGl.useProgram(juliaShaderProgram);
 
-    // Pass the Julia constant (from mouse position on Mandelbrot) to the Julia shader
+    const positionBuffer = createBuffer(juliaGl);
+    configureAttributes(juliaGl, juliaShaderProgram, positionBuffer);
+
     const juliaConstantLocation = juliaGl.getUniformLocation(juliaShaderProgram, "juliaConstant");
     juliaGl.uniform2fv(juliaConstantLocation, juliaConstant);
 
-    // Pass the max iterations from the Mandelbrot state
     const maxIterationsLocation = juliaGl.getUniformLocation(juliaShaderProgram, "maxIterations");
     juliaGl.uniform1i(maxIterationsLocation, maxIterations);
 
-    // Set the rectangle size to the full canvas size
     const rectangleLocation = juliaGl.getUniformLocation(juliaShaderProgram, "rectangle");
-    const zoomOutFactor = 2.0; // default value
+    const zoomOutFactor = 2.0;
     juliaGl.uniform2fv(rectangleLocation, [juliaCanvas.width / juliaCanvas.height * zoomOutFactor, 1 * zoomOutFactor]);
+
+    // Pass cursor position and size to the shader
+    const cursorPositionLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorPosition");
+    const cursorSizeLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorSize");
+    juliaGl.uniform2fv(cursorPositionLocation, juliaConstant);  // Use juliaConstant as cursorPosition
+    juliaGl.uniform1f(cursorSizeLocation, 0.005);  // Set a reasonable cursor size
 
     juliaGl.clear(juliaGl.COLOR_BUFFER_BIT);
     juliaGl.drawArrays(juliaGl.TRIANGLE_STRIP, 0, 4);
+
+    // Draw the cursor
+    drawJuliaCursor();
 };
+
+const drawJuliaCursor = () => {
+    // Enable blending for transparency
+    juliaGl.enable(juliaGl.BLEND);
+    juliaGl.blendFunc(juliaGl.SRC_ALPHA, juliaGl.ONE_MINUS_SRC_ALPHA);
+
+    // Set the color to semi-transparent white (e.g., 50% transparency)
+    // juliaGl.uniform4f(juliaGl.getUniformLocation(juliaShaderProgram, "color"), 1, 1, 1, 1);  // RGBA
+
+    const cursorSize = 0.1;  // Adjust this to control the crosshair size
+    const centerX = juliaConstant[0];  // Cursor center X (where the mouse is on the Mandelbrot set)
+    const centerY = juliaConstant[1];  // Cursor center Y
+
+    // Create vertices for a crosshair (short lines) centered around (centerX, centerY)
+    const cursorVertices = new Float32Array([
+        // Horizontal line
+        centerX - cursorSize, centerY,   // Left point of horizontal line
+        centerX + cursorSize, centerY,   // Right point of horizontal line
+
+        // Vertical line
+        centerX, centerY - cursorSize,   // Bottom point of vertical line
+        centerX, centerY + cursorSize    // Top point of vertical line
+    ]);
+
+    // Bind buffer and upload cursor vertices
+    const cursorBuffer = juliaGl.createBuffer();
+    juliaGl.bindBuffer(juliaGl.ARRAY_BUFFER, cursorBuffer);
+    juliaGl.bufferData(juliaGl.ARRAY_BUFFER, cursorVertices, juliaGl.STATIC_DRAW);
+
+    const positionLocation = juliaGl.getAttribLocation(juliaShaderProgram, "a_position");
+    juliaGl.enableVertexAttribArray(positionLocation);
+    juliaGl.vertexAttribPointer(positionLocation, 2, juliaGl.FLOAT, false, 0, 0);
+
+    // Draw the crosshair (two short lines forming a cross)
+    juliaGl.drawArrays(juliaGl.LINES, 0, 4);
+};
+
+
 
 {
 	canvas.addEventListener("wheel", (event) => {
@@ -273,7 +323,6 @@ const renderJulia = () => {
 			center[1] += ((movementY / canvas.height * 2) / (
 				(scalePerZoom ** zoom)
 			));
-            
 		}
 
 		// Calculate Mandelbrot coordinates and update the display
@@ -283,6 +332,7 @@ const renderJulia = () => {
 		coordinatesDiv.textContent = `X: ${mandelbrotX.toFixed(8)}, Y: ${mandelbrotY.toFixed(8)}`;
 	
         juliaConstant = [mandelbrotX, mandelbrotY];
+        renderJulia();
     });
 
 	{
