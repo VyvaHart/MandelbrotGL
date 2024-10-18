@@ -240,18 +240,20 @@ const renderJulia = () => {
     const zoomOutFactor = 2.0;
     juliaGl.uniform2fv(rectangleLocation, [juliaCanvas.width / juliaCanvas.height * zoomOutFactor, 1 * zoomOutFactor]);
 
-    // Pass cursor position and size to the shader
+    // Ensure that the cursorPosition is properly mapped to the Julia set space
     const cursorPositionLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorPosition");
     const cursorSizeLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorSize");
+
+    // You might need to normalize `juliaConstant` or pass it directly as normalized coordinates
     juliaGl.uniform2fv(cursorPositionLocation, juliaConstant);  // Use juliaConstant as cursorPosition
     juliaGl.uniform1f(cursorSizeLocation, 0.005);  // Set a reasonable cursor size
 
     juliaGl.clear(juliaGl.COLOR_BUFFER_BIT);
     juliaGl.drawArrays(juliaGl.TRIANGLE_STRIP, 0, 4);
 
-    // Draw the cursor
+    // Call drawJuliaCursor (check if blending mode for transparency is correct)
     drawJuliaCursor();
-};
+};  
 
 const drawJuliaCursor = () => {
     // Enable blending for transparency
@@ -261,25 +263,25 @@ const drawJuliaCursor = () => {
     // Set the color to semi-transparent white (e.g., 50% transparency)
     // juliaGl.uniform4f(juliaGl.getUniformLocation(juliaShaderProgram, "color"), 1, 1, 1, 1);  // RGBA
 
-    const cursorSize = 0.1;  // Adjust this to control the crosshair size
-    const centerX = juliaConstant[0];  // Cursor center X (where the mouse is on the Mandelbrot set)
-    const centerY = juliaConstant[1];  // Cursor center Y
+    // const cursorSize = 0.1;  // Adjust this to control the crosshair size
+    // const centerX = juliaConstant[0];  // Cursor center X (where the mouse is on the Mandelbrot set)
+    // const centerY = juliaConstant[1];  // Cursor center Y
 
-    // Create vertices for a crosshair (short lines) centered around (centerX, centerY)
-    const cursorVertices = new Float32Array([
-        // Horizontal line
-        centerX - cursorSize, centerY,   // Left point of horizontal line
-        centerX + cursorSize, centerY,   // Right point of horizontal line
+    // // Create vertices for a crosshair (short lines) centered around (centerX, centerY)
+    // const cursorVertices = new Float32Array([
+    //     // Horizontal line
+    //     centerX - cursorSize, centerY,   // Left point of horizontal line
+    //     centerX + cursorSize, centerY,   // Right point of horizontal line
 
-        // Vertical line
-        centerX, centerY - cursorSize,   // Bottom point of vertical line
-        centerX, centerY + cursorSize    // Top point of vertical line
-    ]);
+    //     // Vertical line
+    //     centerX, centerY - cursorSize,   // Bottom point of vertical line
+    //     centerX, centerY + cursorSize    // Top point of vertical line
+    // ]);
 
     // Bind buffer and upload cursor vertices
-    const cursorBuffer = juliaGl.createBuffer();
-    juliaGl.bindBuffer(juliaGl.ARRAY_BUFFER, cursorBuffer);
-    juliaGl.bufferData(juliaGl.ARRAY_BUFFER, cursorVertices, juliaGl.STATIC_DRAW);
+    // const cursorBuffer = juliaGl.createBuffer();
+    // juliaGl.bindBuffer(juliaGl.ARRAY_BUFFER);
+    // juliaGl.bufferData(juliaGl.ARRAY_BUFFER, juliaGl.STATIC_DRAW);
 
     const positionLocation = juliaGl.getAttribLocation(juliaShaderProgram, "a_position");
     juliaGl.enableVertexAttribArray(positionLocation);
@@ -329,7 +331,8 @@ const drawJuliaCursor = () => {
 		const { offsetX, offsetY } = event;
 		const { x: mandelbrotX, y: mandelbrotY } = canvasToMandelbrot(offsetX, offsetY);
 
-		coordinatesDiv.textContent = `X: ${mandelbrotX.toFixed(8)}, Y: ${mandelbrotY.toFixed(8)}`;
+        document.querySelector("#Im").value = mandelbrotX.toFixed(8);
+        document.querySelector("#Re").value = mandelbrotY.toFixed(8);
 	
         juliaConstant = [mandelbrotX, mandelbrotY];
         renderJulia();
