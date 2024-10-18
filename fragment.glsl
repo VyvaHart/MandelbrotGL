@@ -31,10 +31,9 @@ void main() {
     float intensity = smoothIter * 0.1;
     float noise = smoothIter * 0.1 + sin(smoothIter * 10.0) * 0.1;
 
-    if (iteration < maxIterations) {
+ if (iteration < maxIterations) {
         // Apply different color schemes based on the theme value
         if (theme == 0) {
-            // Default theme: Sinusoidal coloring
             fragColor = vec4(
                 sin(normalizedIter * 5.0),
                 sin(normalizedIter * 10.0),
@@ -48,7 +47,6 @@ void main() {
                 sin(noise * 3.0), 
                 1.0
             );
-        }
         } else if (theme == 2) {
             fragColor = vec4(
                 0.5 + 0.5 * sin(smoothIter * 4.0), 
@@ -63,6 +61,7 @@ void main() {
                 sin(intensity * 3.0), 
                 1.0
             );
+        }
     } else {
         fragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
