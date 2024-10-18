@@ -47,6 +47,6 @@ void main() {
 
     // Check if the fragment is within the cursor's size and also within the max line length
     if ((distX < cursorSize && distY < maxCursorLength) || (distY < cursorSize && distX < maxCursorLength)) {
-        fragColor = vec4(1.0, 1.0, 1.0, 0.5);  // Set the cursor color (white with transparency)
+        fragColor = vec4(1.0, 0.5, 1.0, 1.0);  // Set the cursor color (white with transparency)
     }
 }
