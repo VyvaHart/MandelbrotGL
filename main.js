@@ -331,7 +331,8 @@ const drawJuliaCursor = () => {
 		const { offsetX, offsetY } = event;
 		const { x: mandelbrotX, y: mandelbrotY } = canvasToMandelbrot(offsetX, offsetY);
 
-		coordinatesDiv.textContent = `X: ${mandelbrotX.toFixed(8)}, Y: ${mandelbrotY.toFixed(8)}`;
+        document.querySelector("#Im").value = mandelbrotX.toFixed(8);
+        document.querySelector("#Re").value = mandelbrotY.toFixed(8);
 	
         juliaConstant = [mandelbrotX, mandelbrotY];
         renderJulia();
