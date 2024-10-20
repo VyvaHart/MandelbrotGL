@@ -1,3 +1,4 @@
+
 const mandelbrotCanvas = document.getElementById("canvas");
 const juliaCanvas = document.getElementById("small_canvas");
 
@@ -32,9 +33,9 @@ let mandelbrotShaderProgram, juliaShaderProgram;
 let vertexShaderSource, mandelbrotFragmentShaderSource, juliaFragmentShaderSource;
 
 Promise.all([
-    fetch('vertex.glsl').then(response => response.text()),
-    fetch('fragment.glsl').then(response => response.text()),  // For Mandelbrot
-    fetch('fragment_julia.glsl').then(response => response.text())  // For Julia
+    fetch('shaders/vertex.glsl').then(response => response.text()),
+    fetch('shaders/fragment.glsl').then(response => response.text()),  // For Mandelbrot
+    fetch('shaders/fragment_julia.glsl').then(response => response.text())  // For Julia
 ])
 .then(shaders => {
     [vertexShaderSource, mandelbrotFragmentShaderSource, juliaFragmentShaderSource] = shaders;
@@ -170,7 +171,7 @@ const updateMaxIterations = () => {
 rangeInput.addEventListener("input", updateMaxIterations);
 updateMaxIterations();
 
-const coordinatesDiv = document.querySelector("#coordinates");
+
 // Function to convert canvas coordinates to Mandelbrot coordinates
 const canvasToMandelbrot = (x, y) => {
 	const pointX = ((x / canvas.width * 2 - 1) / (
@@ -230,58 +231,42 @@ const renderJulia = () => {
     const positionBuffer = createBuffer(juliaGl);
     configureAttributes(juliaGl, juliaShaderProgram, positionBuffer);
 
+    // Pass the Mandelbrot coordinates as the Julia constant
     const juliaConstantLocation = juliaGl.getUniformLocation(juliaShaderProgram, "juliaConstant");
-    juliaGl.uniform2fv(juliaConstantLocation, juliaConstant);
+    juliaGl.uniform2fv(juliaConstantLocation, juliaConstant);  // This is correct, using the Mandelbrot cursor
 
     const maxIterationsLocation = juliaGl.getUniformLocation(juliaShaderProgram, "maxIterations");
     juliaGl.uniform1i(maxIterationsLocation, maxIterations);
 
+    // Update: Use same scaling for Julia set as Mandelbrot to sync the cursor
     const rectangleLocation = juliaGl.getUniformLocation(juliaShaderProgram, "rectangle");
-    const zoomOutFactor = 2.0;
-    juliaGl.uniform2fv(rectangleLocation, [juliaCanvas.width / juliaCanvas.height * zoomOutFactor, 1 * zoomOutFactor]);
 
-    // Ensure that the cursorPosition is properly mapped to the Julia set space
+    // Ensure the aspect ratio is the same as Mandelbrot's (no zoom factor needed)
+    juliaGl.uniform2fv(rectangleLocation, [
+        juliaCanvas.width / juliaCanvas.height,  // Keep the aspect ratio consistent with the Mandelbrot set
+        1.0                                      // No scaling difference needed
+    ]);
+
+    // Set the cursor position in the Julia set space
     const cursorPositionLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorPosition");
+    juliaGl.uniform2fv(cursorPositionLocation, juliaConstant);  // Use Mandelbrot coordinates for cursor
+
+    // Set the cursor size (adjust if necessary)
     const cursorSizeLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorSize");
+    juliaGl.uniform1f(cursorSizeLocation, 0.05);  // Adjust size as needed
 
-    // You might need to normalize `juliaConstant` or pass it directly as normalized coordinates
-    juliaGl.uniform2fv(cursorPositionLocation, juliaConstant);  // Use juliaConstant as cursorPosition
-    juliaGl.uniform1f(cursorSizeLocation, 0.005);  // Set a reasonable cursor size
-
+    // Clear and draw the Julia set
     juliaGl.clear(juliaGl.COLOR_BUFFER_BIT);
     juliaGl.drawArrays(juliaGl.TRIANGLE_STRIP, 0, 4);
 
-    // Call drawJuliaCursor (check if blending mode for transparency is correct)
+    // Draw the Julia cursor (should already work)
     drawJuliaCursor();
-};  
+};
 
 const drawJuliaCursor = () => {
     // Enable blending for transparency
     juliaGl.enable(juliaGl.BLEND);
     juliaGl.blendFunc(juliaGl.SRC_ALPHA, juliaGl.ONE_MINUS_SRC_ALPHA);
-
-    // Set the color to semi-transparent white (e.g., 50% transparency)
-    // juliaGl.uniform4f(juliaGl.getUniformLocation(juliaShaderProgram, "color"), 1, 1, 1, 1);  // RGBA
-
-    // const cursorSize = 0.1;  // Adjust this to control the crosshair size
-    // const centerX = juliaConstant[0];  // Cursor center X (where the mouse is on the Mandelbrot set)
-    // const centerY = juliaConstant[1];  // Cursor center Y
-
-    // // Create vertices for a crosshair (short lines) centered around (centerX, centerY)
-    // const cursorVertices = new Float32Array([
-    //     // Horizontal line
-    //     centerX - cursorSize, centerY,   // Left point of horizontal line
-    //     centerX + cursorSize, centerY,   // Right point of horizontal line
-
-    //     // Vertical line
-    //     centerX, centerY - cursorSize,   // Bottom point of vertical line
-    //     centerX, centerY + cursorSize    // Top point of vertical line
-    // ]);
-
-    // Bind buffer and upload cursor vertices
-    // const cursorBuffer = juliaGl.createBuffer();
-    // juliaGl.bindBuffer(juliaGl.ARRAY_BUFFER);
-    // juliaGl.bufferData(juliaGl.ARRAY_BUFFER, juliaGl.STATIC_DRAW);
 
     const positionLocation = juliaGl.getAttribLocation(juliaShaderProgram, "a_position");
     juliaGl.enableVertexAttribArray(positionLocation);
@@ -290,7 +275,6 @@ const drawJuliaCursor = () => {
     // Draw the crosshair (two short lines forming a cross)
     juliaGl.drawArrays(juliaGl.LINES, 0, 4);
 };
-
 
 
 {

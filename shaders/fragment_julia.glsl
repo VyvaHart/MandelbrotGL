@@ -11,8 +11,11 @@ in vec2 fragmentPosition;
 out vec4 fragColor;
 
 void main() {
+
+    vec2 scaledPosition = fragmentPosition * 2.0;
+
     // Julia set rendering
-    vec2 z = fragmentPosition * rectangle;
+    vec2 z = scaledPosition * rectangle;
     int iteration = 0;
     float zx2, zy2;
 
@@ -42,11 +45,11 @@ void main() {
     float maxCursorLength = 0.03;  // Adjust this value to control the cursor line length
 
     // Draw cursor as a white crosshair
-    float distX = abs(fragmentPosition.x - cursorPosition.x);
-    float distY = abs(fragmentPosition.y - cursorPosition.y);
+    float distX = abs(scaledPosition.x - cursorPosition.x);
+    float distY = abs(scaledPosition.y - cursorPosition.y);
 
     // Check if the fragment is within the cursor's size and also within the max line length
     if ((distX < cursorSize && distY < maxCursorLength) || (distY < cursorSize && distX < maxCursorLength)) {
-        fragColor = vec4(1.0, 0.5, 1.0, 1.0);  // Set the cursor color (white with transparency)
+        fragColor = vec4(1.0, 1.0, 1.0, 0.7);  // Set the cursor color (white with transparency)
     }
 }
