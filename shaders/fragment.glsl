@@ -89,7 +89,58 @@ void main() {
         } else if (theme == 6) {
             float angle = atan(z.y, z.x) / (2.0 * 3.14159265359) + 0.5; // Normalize angle to [0, 1]
             fragColor = vec4(hsv2rgb(vec3(angle, 1.0, 1.0)), 1.0); // Convert HSV to RGB
+        } else if (theme == 7) {
+            float distance = length(z);
+            fragColor = (mod(floor(distance * 10.0), 2.0) == 0.0) ? vec4(0.0, 0.0, 0.0, 1.0) : vec4(1.0, 1.0, 1.0, 1.0);
+        } else if (theme == 8) {
+            float radius = length(c);
+            float angle = atan(c.y, c.x) / (2.0 * 3.14159265359) + 0.5;
+            fragColor = vec4(vec3(0.5 + 0.5 * cos(angle * 6.0), 0.5 + 0.5 * sin(radius * 3.0), radius), 1.0);
+        } else if (theme == 9) {
+            fragColor = vec4(
+                smoothstep(0.0, 1.0, normalizedIter * 1.5), 
+                smoothstep(0.5, 1.0, normalizedIter), 
+                1.0 - smoothstep(0.0, 0.5, normalizedIter), 
+                1.0
+                );
+        } else if (theme == 10) {
+            fragColor = vec4(
+                0.2 + 0.3 * sin(smoothIter * 3.0 + 0.5), 
+                0.2 + 0.3 * sin(smoothIter * 5.0 + 1.0), 
+                0.2 + 0.3 * sin(smoothIter * 7.0 + 1.5), 
+                1.0
+            );
+        } else if (theme == 11) {
+            fragColor = vec4(
+                fract(sin(float(iteration) * 12.9898 + float(intensity) * 78.233) * 43758.5453), 
+                fract(sin(float(iteration) * 39.3467 + float(intensity) * 27.887) * 9631.2764), 
+                fract(sin(float(iteration) * 93.4768 + float(intensity) * 12.877) * 15731.753), 
+                1.0
+            );
+        } else if (theme == 12) {
+            fragColor = vec4(
+                0.5 + 0.5 * sin(smoothIter * 8.0), 
+                0.5 + 0.5 * cos(smoothIter * 9.0), 
+                0.5 + 0.5 * sin(smoothIter * 10.0), 
+                1.0
+            );
+        } else if (theme == 13) {
+            fragColor = vec4(
+                0.3 + 0.5 * smoothstep(0.0, 1.0, normalizedIter), 
+                0.25 + 0.4 * smoothstep(0.0, 1.0, normalizedIter * 1.2), 
+                0.15 + 0.2 * smoothstep(0.0, 1.0, normalizedIter * 0.8), 
+                1.0
+            );
+        } else if (theme == 14) {
+            float angle = atan(z.y, z.x) / (2.0 * 3.14159265359) + 0.5;
+            fragColor = vec4(
+                0.5 + 0.5 * sin(angle * 20.0 + smoothIter * 2.0),
+                0.5 + 0.5 * cos(angle * 10.0 + smoothIter * 3.0),
+                0.5 + 0.5 * sin(angle * 15.0 - smoothIter * 1.0),
+                1.0
+            );
         }
+
     } else {
         fragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
