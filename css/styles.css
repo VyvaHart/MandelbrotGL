@@ -81,6 +81,11 @@ label.max-iterations {
     margin-bottom: 20px;
 }
 
+input {
+    border: none;
+    background: transparent;
+}
+
 #theme-select {
     margin-bottom: 20px;
 }
@@ -90,8 +95,30 @@ label.max-iterations {
 }
 
 input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    width: 9rem;
 	margin-top: 5px;
 }
+
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #ffffff;
+    border-radius: 0.7rem;
+    height: 0.5rem;
+  }
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    margin-top: -3px; /* Centers thumb on the track */
+    background-color: #000000;
+    border-radius: 0.5rem;
+    height: 1rem;
+    width: 3rem;    
+ }
 
 #coordinates {
     position: absolute;

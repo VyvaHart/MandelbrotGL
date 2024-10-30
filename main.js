@@ -142,6 +142,14 @@ window.addEventListener('resize', () => {
 
 // Frame rendering function
 const frame = () => {
+
+    smoothMoveCenter();
+    // Smooth zooming logic: Interpolate between current zoom and target zoom
+    const zoomDiff = targetZoom - zoom;
+    if (Math.abs(zoomDiff) > 0.001) {  // Only update if difference is significant
+        zoom += zoomDiff * zoomSpeed;  // Apply easing (adjust zoomSpeed for smoothness)
+    }
+
     // Render Mandelbrot set
     renderMandelbrot();
 
@@ -159,7 +167,7 @@ const frame = () => {
 let juliaConstant = [0, 0];
 let center = [0, 0];
 let zoom = 0;
-const scalePerZoom = 2;
+const scalePerZoom = 2.0;
 let maxIterations = 256;
 
 // Update max iterations when the user adjusts the range input
@@ -233,27 +241,19 @@ const renderJulia = () => {
 
     // Pass the Mandelbrot coordinates as the Julia constant
     const juliaConstantLocation = juliaGl.getUniformLocation(juliaShaderProgram, "juliaConstant");
+    const maxIterationsLocation = juliaGl.getUniformLocation(juliaShaderProgram, "maxIterations");
+    const rectangleLocation = juliaGl.getUniformLocation(juliaShaderProgram, "rectangle");
+    const cursorPositionLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorPosition");
+    const cursorSizeLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorSize");
+    const themeLocation = juliaGl.getUniformLocation(juliaShaderProgram, "theme");
     juliaGl.uniform2fv(juliaConstantLocation, juliaConstant);  // This is correct, using the Mandelbrot cursor
 
-    const maxIterationsLocation = juliaGl.getUniformLocation(juliaShaderProgram, "maxIterations");
+    
     juliaGl.uniform1i(maxIterationsLocation, maxIterations);
-
-    // Update: Use same scaling for Julia set as Mandelbrot to sync the cursor
-    const rectangleLocation = juliaGl.getUniformLocation(juliaShaderProgram, "rectangle");
-
-    // Ensure the aspect ratio is the same as Mandelbrot's (no zoom factor needed)
-    juliaGl.uniform2fv(rectangleLocation, [
-        juliaCanvas.width / juliaCanvas.height,  // Keep the aspect ratio consistent with the Mandelbrot set
-        1.0                                      // No scaling difference needed
-    ]);
-
-    // Set the cursor position in the Julia set space
-    const cursorPositionLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorPosition");
+    juliaGl.uniform2fv(rectangleLocation, [ juliaCanvas.width / juliaCanvas.height, 1.0]);  // Keep the aspect ratio consistent with the Mandelbrot set
     juliaGl.uniform2fv(cursorPositionLocation, juliaConstant);  // Use Mandelbrot coordinates for cursor
-
-    // Set the cursor size (adjust if necessary)
-    const cursorSizeLocation = juliaGl.getUniformLocation(juliaShaderProgram, "cursorSize");
-    juliaGl.uniform1f(cursorSizeLocation, 0.05);  // Adjust size as needed
+    juliaGl.uniform1f(cursorSizeLocation, 0.1);  // Adjust size as needed
+    juliaGl.uniform1i(themeLocation, currentTheme);
 
     // Clear and draw the Julia set
     juliaGl.clear(juliaGl.COLOR_BUFFER_BIT);
@@ -275,30 +275,84 @@ const drawJuliaCursor = () => {
     // Draw the crosshair (two short lines forming a cross)
     juliaGl.drawArrays(juliaGl.LINES, 0, 4);
 };
+         // Current zoom level
+let targetZoom = 0;    // Target zoom level
+const zoomSpeed = 0.1; // Zoom speed for smooth transition (adjust as needed)
+
+// Track whether the Alt key is pressed
+let isAltPressed = false;
+
+// Add event listener to detect Alt key press and release
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'Alt') {
+        console.log('Alt pressed.');
+        isAltPressed = true;
+    }
+});
+
+window.addEventListener('keyup', (event) => {
+    if (event.key === 'Alt') {
+        console.log('Alt unpressed.');
+        isAltPressed = false;
+    }
+});
+
+// Function to smoothly move the viewport center to the target
+let targetCenter = [...center]; // Start with the current center
+
+const smoothMoveCenter = () => {
+    const lerpFactor = 0.1; // Linear interpolation factor (adjust for speed)
+    center[0] += (targetCenter[0] - center[0]) * lerpFactor;
+    center[1] += (targetCenter[1] - center[1]) * lerpFactor;
+
+    // If the distance between current center and target center is small enough, stop moving
+    if (Math.abs(targetCenter[0] - center[0]) < 0.0001 && Math.abs(targetCenter[1] - center[1]) < 0.0001) {
+        center = [...targetCenter]; // Set exact target center to avoid overshooting
+    }
+};
+
+// Event listener for Alt + Right Mouse Click
+mandelbrotCanvas.addEventListener('contextmenu', (event) => {
+    if (isAltPressed) {
+        event.preventDefault(); // Prevent default right-click context menu
+
+        const { offsetX, offsetY } = event;
+
+        // Convert mouse coordinates to Mandelbrot space
+        const { x: mouseMandelbrotX, y: mouseMandelbrotY } = canvasToMandelbrot(offsetX, offsetY);
+
+        // Set the target center to the Mandelbrot coordinates of the mouse
+        targetCenter = [mouseMandelbrotX, mouseMandelbrotY];
+    }
+});
 
 
 {
-	canvas.addEventListener("wheel", (event) => {
-		event.preventDefault();
+    canvas.addEventListener("wheel", (event) => {
+        event.preventDefault();
+    
+        const { offsetX, offsetY, deltaY } = event;
+    
+        // 1. Get the Mandelbrot coordinates under the mouse BEFORE zooming
+        const { x: mouseXBefore, y: mouseYBefore } = canvasToMandelbrot(offsetX, offsetY);
+    
+        // 2. Update the target zoom based on the wheel event
+        const delta = Math.min(Math.max(-deltaY * 5, -100), 100) / 100;
+        targetZoom += delta;
+    
+        // 3. Calculate the Mandelbrot coordinates under the mouse AFTER zooming
+        const { x: mouseXAfter, y: mouseYAfter } = canvasToMandelbrot(offsetX, offsetY);
+    
+        // 4. Adjust the center to zoom in/out towards the mouse pointer
+        // Shift the center to compensate for the change in position of the point under the mouse
+        center[0] += (mouseXBefore - mouseXAfter);
+        center[1] += (mouseYBefore - mouseYAfter);
+    
+    }, { passive: false });
+    
+    
+    
 
-		const { offsetX, offsetY, deltaY } = event;
-
-		const pointX = ((offsetX / canvas.width * 2 - 1) / (
-			(scalePerZoom ** zoom) / (canvas.width / canvas.height)
-		)) + center[0];
-
-		const pointY = (-(offsetY / canvas.height * 2 - 1) / (
-			(scalePerZoom ** zoom)
-		)) + center[1];
-
-		const delta = Math.min(Math.max(-deltaY * 5, -100), 100) / 100;
-
-		zoom += delta;
-
-		center[0] = pointX - (pointX - center[0]) / (scalePerZoom ** delta);
-		center[1] = pointY - (pointY - center[1]) / (scalePerZoom ** delta);
-
-	}, { passive: false });
 
 	canvas.addEventListener("mousemove", (event) => {
 		if (event.buttons & 0b001) {
