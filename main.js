@@ -312,9 +312,9 @@ const smoothMoveCenter = () => {
 };
 
 // Event listener for Alt + Right Mouse Click
-mandelbrotCanvas.addEventListener('contextmenu', (event) => {
+mandelbrotCanvas.addEventListener('mousedown', (event) => {
     if (isAltPressed) {
-        event.preventDefault(); // Prevent default right-click context menu
+        event.preventDefault(); // Prevent default left-click 'mousedown'
 
         const { offsetX, offsetY } = event;
 
