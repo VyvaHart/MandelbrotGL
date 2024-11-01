@@ -14,6 +14,7 @@
 	<title>WebGL Mandelbrot</title>
 
 	<script type="module" src="main.js"></script>
+	<script type="module" src="js/buttons.js"></script> 
 
 	<link rel="prefetch" as="fetch" href="shaders/vertex.glsl" />
 	<link rel="prefetch" as="fetch" href="shaders/fragment.glsl" />
@@ -27,7 +28,12 @@
 			<input type="range" min="0" max="15" value="8" step="1" />
 		</label>
 
-		<span>Coordinates:</span>
+		<hr>
+
+		<span>Zoom level: <span id="zoom-level">0</span></span>
+
+		<!-- <span>Coordinates:</span> -->
+		<hr>
 
 		<label>
 			Re: <input type="text" id="Re" readonly>
@@ -36,27 +42,46 @@
 			Im: <input type="text" id="Im" readonly>
 		</label>
 
-		  <label for="theme-select">Select color map:</label>
-		  <select id="theme-select">
-			  <option value="0">Default</option>
-			  <option value="1">Noisy Rainbow</option>
-			  <option value="2">Smooth Cycles</option>
-			  <option value="3">Intense Shifts</option>
-			  <option value="4">Binary Decomposition</option>
-			  <option value="5">Palette Indexing</option>
-			  <option value="6">Escape Angle</option>
-			  <option value="7">Binary Distance</option>
-			  <option value="8">Radial Gradient</option>
-			  <option value="9">Thermal Vision</option>
-			  <option value="10">Dark Pastel Gradient</option>
-			  <option value="11">Noise-Inspired Random Colors</option>
-			  <option value="12">Soft Neon Glow</option>
-			  <option value="13">Vintage Sepia</option>
-			  <option value="14">Gradient Streaks</option>
-		  </select>
+		<hr>
+
+		<!-- <label for="theme-select">Select color map:</label> -->
+		<select id="theme-select">
+			<option value="" disabled selected>Select the theme:</option>
+			<option value="1">Default</option>
+			<option value="2">Noisy Rainbow</option>
+			<option value="3">Smooth Cycles</option>
+			<option value="4">Intense Shifts</option>
+			<option value="5">Binary Decomposition</option>
+			<option value="6">Palette Indexing</option>
+			<option value="7">Escape Angle</option>
+			<option value="8">Binary Distance</option>
+			<option value="9">Radial Gradient</option>
+			<option value="10">Thermal Vision</option>
+			<option value="11">Dark Pastel Gradient</option>
+			<option value="12">Noise-Inspired Random Colors</option>
+			<option value="13">Soft Neon Glow</option>
+			<option value="14">Vintage Sepia</option>
+			<option value="15">Gradient Streaks</option>
+		</select>
+
+    	<!-- Button container with images inside buttons -->
+    	<div class="button-container">
+    	    <button id="screenshot-button">
+    	        <img src="assets/screenshot.png" alt="Screenshot">
+    	    </button>
+    	    <button id="fullscreen-button">
+    	        <img src="assets/fullscreen.png" alt="Fullscreen">
+    	    </button>
+    	    <button id="no-action-button">
+    	        <img src="assets/gh.png" alt="No Action">
+    	    </button>
+    	</div>
+
+		<!-- Overlay for the screenshot flash effect -->
+		<div id="screenshot-flash"></div>
 	</div>
 
-	<div id="coordinates"></div>
+	<!-- <div id="coordinates"></div> -->
 
 	<canvas class="crosshair" id="canvas"></canvas>
 	<canvas id="small_canvas"></canvas>

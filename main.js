@@ -150,6 +150,7 @@ const frame = () => {
         zoom += zoomDiff * zoomSpeed;  // Apply easing (adjust zoomSpeed for smoothness)
     }
 
+    zoomLevelDisplay.textContent = Math.round(zoom).toString();
     // Render Mandelbrot set
     renderMandelbrot();
 
@@ -167,7 +168,7 @@ const frame = () => {
 let juliaConstant = [0, 0];
 let center = [0, 0];
 let zoom = 0;
-const scalePerZoom = 2.0;
+const scalePerZoom = 1.5;
 let maxIterations = 256;
 
 // Update max iterations when the user adjusts the range input
@@ -194,7 +195,7 @@ const canvasToMandelbrot = (x, y) => {
 };
 
 // Add a variable to track the current theme
-let currentTheme = 0; // 0 for default, 1 for dark, 2 for light, 3 for blue
+let currentTheme = 1; // 0 for default, 1 for dark, 2 for light, 3 for blue
 
 // Function to apply the selected theme to the Mandelbrot shader
 const applyTheme = (theme) => {
@@ -208,8 +209,10 @@ themeSelector.addEventListener('change', (event) => {
     applyTheme(parseInt(selectedTheme, 10));  // Update the theme based on selection
 });
 
+const zoomLevelDisplay = document.getElementById("zoom-level");
 
-const renderMandelbrot = () => {
+
+export const renderMandelbrot = () => {
     if (!mandelbrotShaderProgram) return;
 
     mandelbrotGl.useProgram(mandelbrotShaderProgram);
@@ -301,15 +304,16 @@ window.addEventListener('keyup', (event) => {
 let targetCenter = [...center]; // Start with the current center
 
 const smoothMoveCenter = () => {
-    const lerpFactor = 0.1; // Linear interpolation factor (adjust for speed)
+    const lerpFactor = 0.15; // Adjust for desired smoothness
     center[0] += (targetCenter[0] - center[0]) * lerpFactor;
     center[1] += (targetCenter[1] - center[1]) * lerpFactor;
 
-    // If the distance between current center and target center is small enough, stop moving
+    // Set `center` exactly to `targetCenter` if the difference is negligible
     if (Math.abs(targetCenter[0] - center[0]) < 0.0001 && Math.abs(targetCenter[1] - center[1]) < 0.0001) {
-        center = [...targetCenter]; // Set exact target center to avoid overshooting
+        center = [...targetCenter];
     }
 };
+
 
 // Event listener for Alt + Right Mouse Click
 mandelbrotCanvas.addEventListener('mousedown', (event) => {
@@ -328,7 +332,7 @@ mandelbrotCanvas.addEventListener('mousedown', (event) => {
 
 
 {
-    canvas.addEventListener("wheel", (event) => {
+    mandelbrotCanvas.addEventListener("wheel", (event) => {
         event.preventDefault();
     
         const { offsetX, offsetY, deltaY } = event;
@@ -351,37 +355,33 @@ mandelbrotCanvas.addEventListener('mousedown', (event) => {
     }, { passive: false });
     
     
+    mandelbrotCanvas.addEventListener("mousemove", (event) => {
+        if (event.buttons & 0b001) { // Check if left mouse button is pressed
+            const { movementX, movementY } = event;
+            const aspectRatio = mandelbrotCanvas.width / mandelbrotCanvas.height;
     
-
-
-	canvas.addEventListener("mousemove", (event) => {
-		if (event.buttons & 0b001) {
-			const { movementX, movementY } = event;
-			center[0] += (-(movementX / canvas.width * 2) / (
-				(scalePerZoom ** zoom) / (canvas.width / canvas.height)
-			));
-			center[1] += ((movementY / canvas.height * 2) / (
-				(scalePerZoom ** zoom)
-			));
-		}
-
-		// Calculate Mandelbrot coordinates and update the display
-		const { offsetX, offsetY } = event;
-		const { x: mandelbrotX, y: mandelbrotY } = canvasToMandelbrot(offsetX, offsetY);
+            // Adjust `movementX` by aspect ratio for consistent panning speed
+            targetCenter[0] -= (movementX * 2 * aspectRatio) / (mandelbrotCanvas.width * (scalePerZoom ** zoom));
+            targetCenter[1] += (movementY * 2) / (mandelbrotCanvas.height * (scalePerZoom ** zoom));
+        }
+    
+        // Update Julia set coordinates based on mouse position
+        const { offsetX, offsetY } = event;
+        const { x: mandelbrotX, y: mandelbrotY } = canvasToMandelbrot(offsetX, offsetY);
+        juliaConstant = [mandelbrotX, mandelbrotY];
+        renderJulia();
 
         document.querySelector("#Im").value = mandelbrotX.toFixed(8);
         document.querySelector("#Re").value = mandelbrotY.toFixed(8);
-	
-        juliaConstant = [mandelbrotX, mandelbrotY];
-        renderJulia();
     });
+    
 
 	{
 		let prevTouchX = -1;
 		let prevTouchY = -1;
 		let prevTouchDistance = -1;
 
-		canvas.addEventListener("touchmove", (event) => {
+		mandelbrotCanvas.addEventListener("touchmove", (event) => {
 			event.preventDefault();
 			const { touches } = event;
 			if (touches.length === 1) {
@@ -438,7 +438,7 @@ mandelbrotCanvas.addEventListener('mousedown', (event) => {
 			}
 		}, { passive: false });
 
-		canvas.addEventListener("touchstart", ({ touches }) => {
+		mandelbrotCanvas.addEventListener("touchstart", ({ touches }) => {
 			if (touches.length === 1) {
 				prevTouchX = touches[0].clientX;
 				prevTouchY = touches[0].clientY;
@@ -452,7 +452,7 @@ mandelbrotCanvas.addEventListener('mousedown', (event) => {
 			}
 		}, { passive: false });
 
-		canvas.addEventListener("touchend", ({ touches }) => {
+		mandelbrotCanvas.addEventListener("touchend", ({ touches }) => {
 			if (touches.length === 0) {
 				prevTouchX = -1;
 				prevTouchY = -1;
