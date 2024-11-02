@@ -8,6 +8,7 @@
 	<meta name="theme-color" content="black" />
 
 	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/leftContainer.css">
 	<link rel="icon" href="./assets/icon.png" />
 	<link rel="manifest" href="./app.webmanifest" />
 
@@ -30,6 +31,13 @@
 
 		<hr>
 
+		<div class="color-compression">
+			<label for="colorCompressionRange">Color Compression: <span id="colorCompressionDisplay">1.0</span></label>
+			<input type="range" id="colorCompressionRange" min="0.1" max="10" step="0.1" value="1">
+		</div>
+
+		<hr>
+
 		<span>Zoom level: <span id="zoom-level">0</span></span>
 
 		<!-- <span>Coordinates:</span> -->
@@ -49,19 +57,12 @@
 			<option value="" disabled selected>Select the theme:</option>
 			<option value="1">Default</option>
 			<option value="2">Noisy Rainbow</option>
-			<option value="3">Smooth Cycles</option>
-			<option value="4">Intense Shifts</option>
+			<option value="3">Thermal Vision</option>
 			<option value="5">Binary Decomposition</option>
 			<option value="6">Palette Indexing</option>
 			<option value="7">Escape Angle</option>
-			<option value="8">Binary Distance</option>
-			<option value="9">Radial Gradient</option>
-			<option value="10">Thermal Vision</option>
-			<option value="11">Dark Pastel Gradient</option>
-			<option value="12">Noise-Inspired Random Colors</option>
-			<option value="13">Soft Neon Glow</option>
+			<option value="10">Smooth Cycles</option>
 			<option value="14">Vintage Sepia</option>
-			<option value="15">Gradient Streaks</option>
 		</select>
 
     	<!-- Button container with images inside buttons -->
@@ -75,6 +76,9 @@
     	    <button id="no-action-button">
     	        <img src="assets/gh.png" alt="No Action">
     	    </button>
+			<button id="info">
+    	        <img src="assets/info.png" alt="Info">
+    	    </button>
     	</div>
 
 		<!-- Overlay for the screenshot flash effect -->
@@ -83,7 +87,7 @@
 
 	<!-- <div id="coordinates"></div> -->
 
-	<canvas class="crosshair" id="canvas"></canvas>
+	<canvas id="canvas"></canvas>
 	<canvas id="small_canvas"></canvas>
 </body>
 

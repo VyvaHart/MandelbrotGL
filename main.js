@@ -211,6 +211,22 @@ themeSelector.addEventListener('change', (event) => {
 
 const zoomLevelDisplay = document.getElementById("zoom-level");
 
+// Get the color compression range input and display elements
+const colorCompressionRange = document.getElementById("colorCompressionRange");
+const colorCompressionDisplay = document.getElementById("colorCompressionDisplay");
+
+let colorCompression = parseFloat(colorCompressionRange.value);
+
+// Update the displayed compression value and pass it to the shader
+const updateColorCompression = () => {
+    colorCompression = parseFloat(colorCompressionRange.value);
+    colorCompressionDisplay.textContent = colorCompression.toFixed(1);
+};
+
+// Listen for input changes on the color compression slider
+colorCompressionRange.addEventListener("input", updateColorCompression);
+updateColorCompression();
+
 
 export const renderMandelbrot = () => {
     if (!mandelbrotShaderProgram) return;
@@ -222,6 +238,7 @@ export const renderMandelbrot = () => {
     const rectangleLocation = mandelbrotGl.getUniformLocation(mandelbrotShaderProgram, "rectangle");
     const maxIterationsLocation = mandelbrotGl.getUniformLocation(mandelbrotShaderProgram, "maxIterations");
     const themeLocation = mandelbrotGl.getUniformLocation(mandelbrotShaderProgram, "theme");
+    const colorCompressionLocation = mandelbrotGl.getUniformLocation(mandelbrotShaderProgram, "colorCompression");
 
     // Pass the current theme to the shader
     mandelbrotGl.uniform1i(themeLocation, currentTheme);
@@ -229,6 +246,8 @@ export const renderMandelbrot = () => {
     mandelbrotGl.uniform2fv(centerLocation, center);
     mandelbrotGl.uniform2fv(rectangleLocation, [scalePerZoom ** -zoom * mandelbrotCanvas.width / mandelbrotCanvas.height, scalePerZoom ** -zoom]);
     mandelbrotGl.uniform1i(maxIterationsLocation, maxIterations);
+
+    mandelbrotGl.uniform1f(colorCompressionLocation, colorCompression); // Pass the color compression value
 
     mandelbrotGl.clear(mandelbrotGl.COLOR_BUFFER_BIT);
     mandelbrotGl.drawArrays(mandelbrotGl.TRIANGLE_STRIP, 0, 4);
@@ -282,21 +301,21 @@ const drawJuliaCursor = () => {
 let targetZoom = 0;    // Target zoom level
 const zoomSpeed = 0.1; // Zoom speed for smooth transition (adjust as needed)
 
-// Track whether the Alt key is pressed
-let isAltPressed = false;
+// Track whether the Ctrl key is pressed
+let isCtrlPressed = false;
 
-// Add event listener to detect Alt key press and release
+// Add event listener to detect Ctrl key press and release
 window.addEventListener('keydown', (event) => {
-    if (event.key === 'Alt') {
-        console.log('Alt pressed.');
-        isAltPressed = true;
+    if (event.key === 'Control') {
+        console.log('Ctrl pressed.');
+        isCtrlPressed = true;
     }
 });
 
 window.addEventListener('keyup', (event) => {
-    if (event.key === 'Alt') {
-        console.log('Alt unpressed.');
-        isAltPressed = false;
+    if (event.key === 'Control') {
+        console.log('Ctrl unpressed.');
+        isCtrlPressed = false;
     }
 });
 
@@ -315,9 +334,9 @@ const smoothMoveCenter = () => {
 };
 
 
-// Event listener for Alt + Right Mouse Click
+// Event listener for Ctrl + Right Mouse Click
 mandelbrotCanvas.addEventListener('mousedown', (event) => {
-    if (isAltPressed) {
+    if (isCtrlPressed) {
         event.preventDefault(); // Prevent default left-click 'mousedown'
 
         const { offsetX, offsetY } = event;
@@ -371,8 +390,8 @@ mandelbrotCanvas.addEventListener('mousedown', (event) => {
         juliaConstant = [mandelbrotX, mandelbrotY];
         renderJulia();
 
-        document.querySelector("#Im").value = mandelbrotX.toFixed(8);
-        document.querySelector("#Re").value = mandelbrotY.toFixed(8);
+        document.querySelector("#Re").value = mandelbrotX.toFixed(8);
+        document.querySelector("#Im").value = mandelbrotY.toFixed(8);
     });
     
 
