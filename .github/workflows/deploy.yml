@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # master branch
+      - main  # main branch
 
 jobs:
   deploy:
@@ -19,17 +19,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
 
-      - name: Download from S3
-        uses: actions/download-artifact@v3
-        with:
-          name: mandelbrot-assets
-          path: ./assets/
+      - name: Download assets from S3
+        run: |
+          mkdir -p ./assets  # Ensure the assets folder exists
+          aws s3 cp s3://your-s3-bucket-name/mandelbrot-asset/ ./assets/ --recursive
 
       - name: Deploy to GitHub Pages
         run: |
           cp -r -u ./assets/* ./  # Copy assets, overwriting only if newer
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add .
+          git add .  # Corrected the spacing
           git commit -m "Deploy from S3" || echo "No changes to commit"  # Handle no changes
           git push origin main
