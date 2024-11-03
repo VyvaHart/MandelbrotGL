@@ -166,7 +166,7 @@ const frame = () => {
 
 // Store mouse coordinates in Mandelbrot space
 let juliaConstant = [0, 0];
-let center = [0, 0];
+let center = [-0.5, 0];
 let zoom = 0;
 const scalePerZoom = 1.5;
 let maxIterations = 256;
@@ -195,7 +195,7 @@ const canvasToMandelbrot = (x, y) => {
 };
 
 // Add a variable to track the current theme
-let currentTheme = 1; // 0 for default, 1 for dark, 2 for light, 3 for blue
+let currentTheme = 2; // 0 for default, 1 for dark, 2 for light, 3 for blue
 
 // Function to apply the selected theme to the Mandelbrot shader
 const applyTheme = (theme) => {
@@ -306,7 +306,7 @@ let isCtrlPressed = false;
 
 // Add event listener to detect Ctrl key press and release
 window.addEventListener('keydown', (event) => {
-    if (event.key === 'Control') {
+    if (event.key === 'Control' &&!event.repeat) {
         console.log('Ctrl pressed.');
         isCtrlPressed = true;
     }
@@ -392,6 +392,21 @@ mandelbrotCanvas.addEventListener('mousedown', (event) => {
 
         document.querySelector("#Re").value = mandelbrotX.toFixed(8);
         document.querySelector("#Im").value = mandelbrotY.toFixed(8);
+    });
+
+    // Disable right-click context menu
+    document.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key === 'Q' || event.key === 'q') {
+            // Zoom out
+            targetZoom -= 0.2; // Adjust the zoom-out step as needed
+        } else if (event.key === 'E' || event.key === 'e') {
+            // Zoom in
+            targetZoom += 0.2; // Adjust the zoom-in step as needed
+        }
     });
     
 

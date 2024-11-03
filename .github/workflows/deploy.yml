@@ -26,7 +26,6 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: |
-          cp -r -u ./assets/* ./  # Copy assets, overwriting only if newer
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add .  # Corrected the spacing

@@ -14,6 +14,7 @@ body {
     gap: .5rem;
     padding-block-start: .5rem;
     min-block-size: 100dvb;
+    overflow: hidden;
 }
 
 h1 {

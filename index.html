@@ -9,6 +9,7 @@
 
 	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="css/leftContainer.css">
+	<link rel="stylesheet" href="css/info.css">
 	<link rel="icon" href="./assets/icon.png" />
 	<link rel="manifest" href="./app.webmanifest" />
 
@@ -52,10 +53,19 @@
 
 		<hr>
 
+		<!-- Control explanation section -->
+		<div class="control-explanation">
+			<h3>Controls</h3>
+				<li>Zoom In/Out: <strong>Q/E</strong></li>
+				<li>Ctrl+LMB: <strong>Center a point</strong></li>
+		</div>
+		
+		<hr>
+
 		<!-- <label for="theme-select">Select color map:</label> -->
 		<select id="theme-select">
 			<option value="" disabled selected>Select the theme:</option>
-			<option value="1">Default</option>
+			<option value="1">Emerald Flow</option>
 			<option value="2">Noisy Rainbow</option>
 			<option value="3">Thermal Vision</option>
 			<option value="5">Binary Decomposition</option>
@@ -67,15 +77,18 @@
 
     	<!-- Button container with images inside buttons -->
     	<div class="button-container">
+			<button id="hide-button">
+    	        <img src="assets/left_arrow.png" alt="Hide container">
+    	    </button>
+			<button id="fullscreen-button">
+    	        <img src="assets/fullscreen.png" alt="Fullscreen">
+    	    </button>
     	    <button id="screenshot-button">
     	        <img src="assets/screenshot.png" alt="Screenshot">
     	    </button>
-    	    <button id="fullscreen-button">
-    	        <img src="assets/fullscreen.png" alt="Fullscreen">
-    	    </button>
-    	    <button id="no-action-button">
+    	    <!-- <button id="no-action-button">
     	        <img src="assets/gh.png" alt="No Action">
-    	    </button>
+    	    </button> -->
 			<button id="info">
     	        <img src="assets/info.png" alt="Info">
     	    </button>

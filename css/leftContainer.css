@@ -1,7 +1,6 @@
 .top-left-container {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 15px;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     padding: 15px;
     border-radius: 5px;
@@ -12,6 +11,7 @@
     align-items: flex-start;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
     gap: 13px; /* Sets a consistent gap between elements */
+    /* transition: transform 0.5s ease; Smooth slide transition */
 }
 
 .top-left-container > span {
@@ -61,7 +61,8 @@ hr {
     justify-content: flex-start; /* Align buttons to the left */
     gap: 20px;
     width: 100%;
-    margin-top: 0; /* Removes margin top */
+    margin-top: 2rem; /* Removes margin top */
+    justify-content: space-around;
 }
 
 .button-container button {
@@ -77,6 +78,21 @@ hr {
     width: 100%;
     height: 100%;
     object-fit: contain; /* Makes sure images fit within buttons */
+}
+
+#show-button {
+    background-color: #33333300;
+    color: white;
+    border: none;
+    padding: 10px; /* Adjust padding to fit the icon */
+    border-radius: 5px;
+    cursor: pointer;
+    background-image: url("/assets/show.png"); /* Path to your image */
+    background-size: contain; /* Ensures the icon fits within the button */
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px; /* Set a width to fit the icon */
+    height: 40px; /* Set a height to fit the icon */
 }
 
 #screenshot-flash {
@@ -99,6 +115,7 @@ input[type="range"] {
     cursor: pointer;
     width: 10rem; /* Increases range input width */
     margin-top: 0; /* Removes margin top */
+    padding-left: 2px;
 }
 
 /* Chrome, Safari, Opera, and Edge Chromium */
