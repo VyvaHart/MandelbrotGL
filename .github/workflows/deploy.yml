@@ -21,7 +21,7 @@ jobs:
 
       - name: Download assets from S3
         run: |
-          mkdir -p ./assets  # Ensure the assets folder exists
+          mkdir -p ./assets  # Ensure this folder exists
           aws s3 cp s3://your-s3-bucket-name/mandelbrot-asset/ ./assets/ --recursive
 
       - name: Deploy to GitHub Pages
