@@ -1,4 +1,4 @@
-import { renderMandelbrot } from '../main.js'
+import { renderMandelbrot } from './rendering.js'
 
 document.getElementById("fullscreen-button").addEventListener("click", function () {
     if (!document.fullscreenElement) {
