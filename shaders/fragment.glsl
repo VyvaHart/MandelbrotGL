@@ -42,13 +42,6 @@ void main() {
 
  if (iteration < maxIterations) {
 
-        // fragColor = vec4(
-        //     sin(noise * 1.0 * normalizedIter), 
-        //     sin(noise * 2.0 * normalizedIter), 
-        //     sin(noise * 3.0 * normalizedIter), 
-        //     1.0
-        // );
-
         // Apply different color schemes based on the theme value
         if (theme == 1) {
             fragColor = vec4(
