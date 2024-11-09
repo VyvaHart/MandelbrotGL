@@ -1,98 +1,91 @@
 .top-left-container {
     position: absolute;
     top: 15px;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-    padding: 15px;
-    border-radius: 5px;
-    color: white;
-    z-index: 100; /* Ensures it stays on top */
+    background: rgba(0, 0, 0, 0.3); /* Softer, semi-transparent background */
+    backdrop-filter: blur(8px); /* Blur effect for a frosted glass look */
+    padding: 20px;
+    border-radius: 12px;
+    color: #f1f1f1;
+    z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
-    gap: 13px; /* Sets a consistent gap between elements */
-    /* transition: transform 0.5s ease; Smooth slide transition */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* More prominent shadow */
+    gap: 15px;
+    font-family: Arial, sans-serif; /* Clean, readable font */
 }
 
 .top-left-container > span {
-    margin-bottom: 0; /* Removes margin bottom */
-    font-weight: thin;
-    font-size: 1.2rem; /* Increases font size */
+    font-weight: 300;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
 }
 
-label.max-iterations {
+label.max-iterations, .color-compression {
+    color: #e0e0e0;
+    font-size: 0.9rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    color: white;
-    margin-bottom: 0; /* Removes margin bottom */
+    gap: 4px;
 }
 
 input {
-    border: none;
-    background: transparent;
-    padding: 5px; /* Adds padding to input fields */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f1f1;
+    padding: 6px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+input:focus {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 #theme-select {
-    margin-bottom: 0; /* Removes margin bottom */
-    background-color: rgba(100, 83, 83, 0.6); /* Dark background color */
-    color: white; /* White text color */
-    padding: 8px;
+    background-color: rgba(100, 83, 83, 0.6);
+    color: #f1f1f1;
+    padding: 10px;
     border: none;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 10px;
     outline: none;
     font-size: 1rem;
-    width: 100%; /* Optional: makes it fit the container width */
+    transition: background-color 0.3s ease;
+    width: 100%;
 }
 
-hr {
-    height: 2px; /* adjust the height to make the line thicker */
-    width: 100%; /* Makes the line full-width */
-    border: none; /* remove the default border */
-    background-color: #ccc; /* change the background color to a lighter gray */
-    margin: 0 auto; /* Centers the line */
+#theme-select:hover {
+    background-color: rgba(100, 83, 83, 0.8);
 }
 
 .button-container {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start; /* Align buttons to the left */
-    gap: 20px;
-    width: 100%;
-    margin-top: 2rem; /* Removes margin top */
     justify-content: space-around;
+    gap: 15px;
+    width: 100%;
+    margin-top: 1.5rem;
 }
 
 .button-container button {
-    background: none;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
-    padding: 0;
+    border-radius: 8px;
+    padding: 8px;
     cursor: pointer;
-    width: 25px; /* Increases button size */
-    height: 25px;
+    width: 35px;
+    height: 35px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.button-container button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .button-container button img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Makes sure images fit within buttons */
-}
-
-#show-button {
-    background-color: #33333300;
-    color: white;
-    border: none;
-    padding: 10px; /* Adjust padding to fit the icon */
-    border-radius: 5px;
-    cursor: pointer;
-    background-image: url("/assets/show.png"); /* Path to your image */
-    background-size: contain; /* Ensures the icon fits within the button */
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 40px; /* Set a width to fit the icon */
-    height: 40px; /* Set a height to fit the icon */
+    object-fit: contain;
 }
 
 #screenshot-flash {
@@ -105,44 +98,32 @@ hr {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease-out;
-    z-index: 1000; /* Make sure it's above other content */
+    z-index: 1000;
 }
 
 input[type="range"] {
-    -webkit-appearance: none;
     appearance: none;
-    background: transparent;
-    cursor: pointer;
-    width: 10rem; /* Increases range input width */
-    margin-top: 0; /* Removes margin top */
-    padding-left: 2px;
-}
-
-/* Chrome, Safari, Opera, and Edge Chromium */
-input[type="range"]::-webkit-slider-runnable-track {
-    background: #ffffff;
-    border-radius: 0.5rem;
-    height: 0.5rem;
+    width: 100%;
+    height: 8px;
+    background: #f1f1f1;
+    border-radius: 5px;
+    outline: none;
+    margin: 4px 0;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
     appearance: none;
+    width: 20px;
+    height: 20px;
     background: rgba(100, 83, 83, 0.6);
-    border-radius: 0.5rem;
-    height: 0.5rem;
-    width: 3rem;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
-.color-compression {
-    display: flex;
-    flex-direction: column;
-    align-items: start; /* Align items to the start of the container */
-    gap: 1px; /* Adds a little space */
-}
-
-.color-compression input[type="range"] {
-    margin-top: 0; /* Removes margin top */
-    width: 100%;
-    margin-bottom: 0; /* Removes margin bottom */
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: rgba(100, 83, 83, 0.6);
+    border-radius: 50%;
+    cursor: pointer;
 }
