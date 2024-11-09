@@ -1,7 +1,7 @@
 {
-	"name": "WebGPU Mandelbrot",
+	"name": "WebGL Mandelbrot",
 	"short_name": "Mandelbrot",
-	"description": "A GPU accelerated Mandelbrot viewer made using the WebGPU API",
+	"description": "A GPU accelerated Mandelbrot viewer made using the WebGL API",
 	"start_url": "./",
 	"display": "standalone",
 	"background_color": "#000",
