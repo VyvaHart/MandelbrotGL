@@ -74,3 +74,17 @@ canvas {
     z-index: 2; /* Overlay it above the WebGL canvas */
     pointer-events: none; /* Make sure it doesn't block user interactions */
 }
+
+#github-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: transparent;
+}
+
+#github-button iframe {
+    border: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 10px;
+}
