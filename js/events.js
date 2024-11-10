@@ -1,8 +1,6 @@
-// events.js
-
-import { config, mandelbrotCanvas, juliaCanvas, pixelRatio, scalePerZoom, rangeInput, colorCompressionRange, colorCompressionDisplay, themeSelector } from './config.js';
+import { config, mandelbrotCanvas, pixelRatio, scalePerZoom, rangeInput, colorCompressionRange, colorCompressionDisplay, themeSelector } from './config.js';
 import { renderJulia } from './rendering.js';
-import { canvasToMandelbrot, getCanvasCoordinates, preventDefaultBehavior } from './utils.js';
+import { cursorCoordinates, getCanvasCoordinates, preventDefaultBehavior } from './utils.js';
 
 // Update max iterations
 const updateMaxIterations = () => {
@@ -29,7 +27,6 @@ const updateColorCompression = () => {
 // Track Ctrl key press
 const handleCtrlKey = (event, pressed) => {
     if (event.key === 'Control') {
-        console.log(`Ctrl ${pressed ? 'pressed' : 'unpressed'}.`);
         config.isCtrlPressed = pressed;
     }
 };
@@ -39,7 +36,7 @@ const handleCtrlClick = (event) => {
     if (config.isCtrlPressed && event.button === 0) {
         preventDefaultBehavior(event);
         const { x, y } = getCanvasCoordinates(event);
-        const { x: mouseX, y: mouseY } = canvasToMandelbrot(x, y);
+        const { x: mouseX, y: mouseY } = cursorCoordinates(x, y);
         config.targetCenter = [mouseX, mouseY];
     }
 };
@@ -51,8 +48,8 @@ const handleWheelZoom = (event) => {
     const delta = Math.min(Math.max(-event.deltaY * 5, -100), 100) / 100;
     config.targetZoom += delta;
 
-    const { x: mouseXBefore, y: mouseYBefore } = canvasToMandelbrot(x, y);
-    const { x: mouseXAfter, y: mouseYAfter } = canvasToMandelbrot(x, y);
+    const { x: mouseXBefore, y: mouseYBefore } = cursorCoordinates(x, y);
+    const { x: mouseXAfter, y: mouseYAfter } = cursorCoordinates(x, y);
     config.center[0] += (mouseXBefore - mouseXAfter);
     config.center[1] += (mouseYBefore - mouseYAfter);
 };
@@ -67,7 +64,7 @@ const handleMouseMove = (event) => {
     }
 
     const { x, y } = getCanvasCoordinates(event);
-    const { x: mandelbrotX, y: mandelbrotY } = canvasToMandelbrot(x, y);
+    const { x: mandelbrotX, y: mandelbrotY } = cursorCoordinates(x, y);
     config.juliaConstant = [mandelbrotX, mandelbrotY];
     renderJulia();
     document.querySelector("#Re").value = mandelbrotX.toFixed(8);

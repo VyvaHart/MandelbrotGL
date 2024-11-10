@@ -1,6 +1,5 @@
-// shaders.js
 import { mandelbrotGl, juliaGl, config } from './config.js';
-import { createBuffer, configureAttributes } from './utils.js';
+import { configureAttributes } from './utils.js';
 
 export const fetchShaders = async () => {
     const [vertexSource, mandelbrotSource, juliaSource] = await Promise.all([

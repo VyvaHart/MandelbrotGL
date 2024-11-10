@@ -1,4 +1,3 @@
-// utils.js
 import { pixelRatio, config, scalePerZoom, mandelbrotCanvas, zoomSpeed, zoomLevelDisplay } from './config.js';
 
 export const createBuffer = (gl) => {
@@ -30,7 +29,7 @@ export const resizeCanvas = (canvas, gl) => {
 };
 
 // Function to convert canvas coordinates to Mandelbrot coordinates
-export const canvasToMandelbrot = (x, y) => {
+export const cursorCoordinates = (x, y) => {
 	const pointX = ((x / mandelbrotCanvas.width * 2 - 1) / (
 		(scalePerZoom ** config.zoom) / (mandelbrotCanvas.width / mandelbrotCanvas.height)
 	)) + config.center[0];

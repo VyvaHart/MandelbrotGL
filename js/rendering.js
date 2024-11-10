@@ -1,4 +1,3 @@
-// rendering.js
 import { mandelbrotGl, juliaGl, mandelbrotCanvas, juliaCanvas, scalePerZoom, config } from './config.js';
 
 // Render the Mandelbrot set
