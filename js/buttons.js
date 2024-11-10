@@ -50,11 +50,11 @@ document.getElementById("info").addEventListener("click", function() {
     <div style="font-family: Arial, sans-serif; padding: 10px; max-width: 400px;">
         <h3 style="font-weight: bold; font-size: 1.2em;">Mandelbrot Set Explorer</h3>
         <p style="font-style: italic;">
-            This WebGL-based fractal explorer is a <b>dynamic web application</b> that enables users to interact with 
-            the Mandelbrot and Julia sets in real-time. It combines a high-performance <u>WebGL2 rendering pipeline</u> 
-            with a responsive, touch- and pointer-friendly UI. Users can seamlessly zoom, pan, and manipulate the complex 
-            parameters to visualize intricate fractal structures, offering a visually rich experience on both desktop and 
-            mobile devices.
+            This WebGL-based fractal explorer is a dynamic web application that enables users to
+            interact in real time with the Mandelbrot and Julia fractals. It combines a high-performance
+            WebGL2 rendering pipeline with a responsive, touch- and pointer-friendly UI. Users can
+            seamlessly zoom, pan, and manipulate the complex parameters to visualize intricate fractal
+            structures, offering a visually rich experience on both desktop and mobile devices.
         </p>
         
         <h4 style="font-weight: bold; margin-top: 1em;">Features and User Interactions</h4>
