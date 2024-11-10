@@ -35,13 +35,7 @@ document.getElementById("screenshot-button").addEventListener("click", () => {
     }, 400); // Wait for the transition to complete (300ms after the start)
   });
 
-// document.getElementById("no-action-button").addEventListener("click", () => {
-//   window.open("https://github.com/VyvaHart/MandelbrotGL", "_blank");
-// });
-
 document.getElementById("info").addEventListener("click", function() {
-  // Check if the modal already exists
-  if (document.getElementById("info-modal")) return;
 
   // Create the modal background
   const modalBackground = document.createElement("div");
@@ -51,7 +45,7 @@ document.getElementById("info").addEventListener("click", function() {
   const modal = document.createElement("div");
   modal.id = "info-modal";
 
-  // Add Lorem Ipsum paragraphs
+  // Add project description
   modal.innerHTML = `
     <div style="font-family: Arial, sans-serif; padding: 10px; max-width: 400px;">
         <h3 style="font-weight: bold; font-size: 1.2em;">Mandelbrot Set Explorer</h3>
