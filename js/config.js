@@ -1,5 +1,3 @@
-// config.js
-
 // Immutable constants
 export const mandelbrotCanvas = document.getElementById("canvas");
 export const juliaCanvas = document.getElementById("small_canvas");
@@ -30,5 +28,5 @@ export const zoomLevelDisplay = document.getElementById("zoom-level");
 
 // Other constants
 export const pixelRatio = window.devicePixelRatio;
-export const scalePerZoom = 1.5;
+export const scalePerZoom = 1.4;
 export const zoomSpeed = 0.1;
