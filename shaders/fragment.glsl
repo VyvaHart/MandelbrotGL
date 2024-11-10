@@ -64,14 +64,14 @@ void main() {
                 1.0 - smoothstep(0.0, 0.5, normalizedIter), 
                 1.0
                 );
-        } else if (theme == 5) {
+        } else if (theme == 4) {
             fragColor = vec4(
                 float(iteration & 0x04) / 4.0,  // Extract the 3rd bit (red)
                 float(iteration & 0x02) / 2.0,  // Extract the 2nd bit (green)
                 float(iteration & 0x01),        // Extract the 1st bit (blue)
                 1.0
             );
-        } else if (theme == 6) {
+        } else if (theme == 5) {
             vec3 colors[5] = vec3[](
                 vec3(1.0, 0.0, 0.0),  // Red
                 vec3(0.0, 1.0, 0.0),  // Green
@@ -81,17 +81,17 @@ void main() {
             );
             int index = int(normalizedIter * float(colors.length()));
             fragColor = vec4(colors[index], 1.0);
-        } else if (theme == 7) {
+        } else if (theme == 6) {
             float angle = atan(z.y, z.x) / (2.0 * 3.14159265359) + 0.5; // Normalize angle to [0, 1]
             fragColor = vec4(hsv2rgb(vec3(angle, 1.0, 1.0)), 1.0); // Convert HSV to RGB
-        } else if (theme == 10) {
+        } else if (theme == 7) {
             fragColor = vec4(
                 0.5 + 0.5 * sin(smoothIter * 4.0), 
                 0.5 + 0.5 * sin(smoothIter * 8.0), 
                 0.5 + 0.5 * sin(smoothIter * 12.0), 
                 1.0
             );
-        }else if (theme == 14) {
+        }else if (theme == 8) {
             fragColor = vec4(0.53f, 0.4f, 0.15f, 1.0f);
         }
 
