@@ -35,7 +35,7 @@ Fractals are a set of infinitely complex patterns that show self-similarity at v
 - **Mouse Scroll or Q/E**: Zoom in/out.
 - **Left-click + Drag**: Pan across the Mandelbrot set.
 - **Ctrl + Left-click**: Center the view on a specific point.
-- **Theme Selector**: Switch between color themes.
+- **Color Map**: Switch between color themes.
 - **Julia Set**: View a Julia set based on the current Mandelbrot position.
 
 <table>
@@ -48,7 +48,7 @@ Fractals are a set of infinitely complex patterns that show self-similarity at v
 
 ### Prerequisites
 
-- A modern web browser with WebGL2 support (e.g., Chrome, Safari).
+- A standard web browser with WebGL2 support (e.g., Chrome, Safari).
 - To view the application locally, you can use:
   - **GitHub Pages**: Access the application directly through this repository’s GitHub Pages link.
   - **http-server**: Run a local development server with Node.js.
