@@ -28,7 +28,9 @@ Fractals are a set of infinitely complex patterns that show self-similarity at v
   </tr>
 </table>
 
-**Mac Retina Display:** Coordinate handling may be inaccurate on Mac devices with Retina displays due to differences in `window.devicePixelRatio` implementation. wip... :warning:
+~~**Mac Retina Display:** Coordinate handling may be inaccurate on Mac devices with Retina displays due to differences in `window.devicePixelRatio` implementation. wip...~~ 
+
+**Fixed** ☑️
 
 ## Basic Controls
 
