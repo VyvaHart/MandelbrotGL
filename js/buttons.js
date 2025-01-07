@@ -115,12 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
         showButton.style.border = "none";
         showButton.style.top = "20px";
         showButton.style.left = "10px";
-        // showButton.style.padding = "6px";
         showButton.style.zIndex = "110"; // Ensures it stays on top of other elements
 
         // Create the image element
         const buttonImage = document.createElement("img");
-        buttonImage.src = "../assets/right_arrow.png";
+        buttonImage.src = "./assets/right_arrow.png";
         buttonImage.alt = "Show Button Image";
         buttonImage.style.width = "20px"; 
         buttonImage.style.height = "20px"; 
