@@ -44,7 +44,7 @@ export const cursorCoordinates = (x, y) => {
 // Helper function to get mouse or touch position in canvas coordinates
 export const getCanvasCoordinates = (event) => {
     const { offsetX, offsetY } = event;
-    return { x: offsetX, y: offsetY };
+    return { x: offsetX * pixelRatio, y: offsetY * pixelRatio };
 };
 
 // Helper function to prevent default behavior for specific events
